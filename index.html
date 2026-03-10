@@ -2515,6 +2515,53 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <script src="js/plugins.js"></script>
     <script src="js/script.js"></script>
+    <script>
+  $(document).ready(function() {
+    console.log("Wedding Simulation Layer Active");
+
+    // 1. Simulación de Identify (Se activa al usar el formulario de Newsletter)
+    $('form[role="newsletter"]').on('submit', function(e) {
+      e.preventDefault();
+      const email = $(this).find('input[type="email"]').val();
+      
+      analytics.identify('user_10000000023624376', {
+        email: email,
+        wedding_date: '2027-05-05',
+        wedding_budget: 35000,
+        guest_count: 150,
+        member_type: 'groom',
+        ga4_client_id: '542730843.1772750223' // El ID que auditamos previamente
+      });
+      alert('Identify sent for: ' + email);
+    });
+
+    // 2. Simulación de Vendor Viewed (Se activa al hacer clic en categorías o imágenes)
+    $('.category-item, .product-item img').on('click', function() {
+      const vendorName = $(this).closest('.product-item').find('h3').text() || "Hacienda del Sol";
+      const category = "Venues";
+      
+      analytics.track('Vendor Viewed', {
+        vendor_name: vendorName,
+        category: category,
+        price_range: '$$$',
+        rating: 4.9
+      });
+    });
+
+    // 3. Simulación de Vendor Shortlisted (Se activa con el botón "Add to Cart")
+    $('.add-to-cart').on('click', function(e) {
+      e.preventDefault();
+      const vendorName = $(this).data('product-name') || "Photography Service";
+      
+      analytics.track('Vendor Shortlisted', {
+        vendor_name: vendorName,
+        category: 'Services',
+        wishlist_id: 'wish_9988'
+      });
+    });
+  });
+</script>
   </body>
 
 </html>
+
