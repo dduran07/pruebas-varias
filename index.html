@@ -651,7 +651,7 @@
                             <img src="images/thumb-biscuits.png"  class="tab-image">
                           </a>
                         </figure>
-                        <h3>Sunstar Fresh Melon Juice</h3>
+                        <h3>Hacienda del Sol</h3>
                         <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
                         <span class="price">$18.00</span>
                         <div class="d-flex align-items-center justify-content-between">
@@ -668,7 +668,9 @@
                                   </button>
                               </span>
                           </div>
-                          <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
+                          <<a href="#" class="nav-link add-to-cart" data-vendor="Hacienda del Sol">
+                          Add to Cart <svg class="cart"><use xlink:href="#cart"></use></svg>
+                          </a>>
                         </div>
                       </div>
                     </div>
@@ -681,9 +683,9 @@
                             <img src="images/thumb-cucumber.png"  class="tab-image">
                           </a>
                         </figure>
-                        <h3>Sunstar Fresh Melon Juice</h3>
+                        <h3>Luna Wedding Photos</h3>
                         <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
-                        <span class="price">$18.00</span>
+                        <span class="price">$20.00</span>
                         <div class="d-flex align-items-center justify-content-between">
                           <div class="input-group product-qty">
                               <span class="input-group-btn">
@@ -698,7 +700,9 @@
                                   </button>
                               </span>
                           </div>
-                          <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
+                          <a href="#" class="nav-link add-to-cart" data-vendor="Luna Wedding Photos">
+                          Add to Cart <svg class="cart"><use xlink:href="#cart"></use></svg>
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -711,7 +715,7 @@
                             <img src="images/thumb-milk.png"  class="tab-image">
                           </a>
                         </figure>
-                        <h3>Sunstar Fresh Melon Juice</h3>
+                        <h3>Premium Banquet Service</h3>
                         <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
                         <span class="price">$18.00</span>
                         <div class="d-flex align-items-center justify-content-between">
@@ -728,7 +732,9 @@
                                   </button>
                               </span>
                           </div>
-                          <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
+                          <a href="#" class="nav-link add-to-cart" data-vendor="Premium Banquet Service">
+                          Add to Cart <svg class="cart"><use xlink:href="#cart"></use></svg>
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -2516,52 +2522,62 @@
     <script src="js/plugins.js"></script>
     <script src="js/script.js"></script>
     <script>
+  <script>
   $(document).ready(function() {
-    console.log("Wedding Simulation Layer Active");
+    console.log("🚀 Segment Wedding Logic Loaded");
 
-    // 1. Simulación de Identify (Se activa al usar el formulario de Newsletter)
+    // 1. IDENTITY & ONBOARDING
+    // Capturamos el correo del footer como si fuera un registro de usuario
     $('form[role="newsletter"]').on('submit', function(e) {
       e.preventDefault();
-      const email = $(this).find('input[type="email"]').val();
+      const userEmail = $(this).find('input[type="email"]').val();
       
-      analytics.identify('user_10000000023624376', {
-        email: email,
+      analytics.identify('10000000023624376', {
+        email: userEmail,
         wedding_date: '2027-05-05',
-        wedding_budget: 35000,
-        guest_count: 150,
+        wedding_budget: 45000,
+        guest_count: 200,
         member_type: 'groom',
-        ga4_client_id: '542730843.1772750223' // El ID que auditamos previamente
+        ga4_client_id: '542730843.1772750223' // Stitching ID para Robert
       });
-      alert('Identify sent for: ' + email);
+      
+      console.log("✅ Identify dispatched for: " + userEmail);
+      alert("Identify sent! Check your Segment Debugger.");
     });
 
-    // 2. Simulación de Vendor Viewed (Se activa al hacer clic en categorías o imágenes)
-    $('.category-item, .product-item img').on('click', function() {
-      const vendorName = $(this).closest('.product-item').find('h3').text() || "Hacienda del Sol";
-      const category = "Venues";
+    // 2. VENDOR VIEWED (Simulamos clic en imagen o título de producto)
+    $('.product-item img, .product-item h3').on('click', function() {
+      const name = $(this).closest('.product-item').find('h3').text();
       
       analytics.track('Vendor Viewed', {
-        vendor_name: vendorName,
-        category: category,
+        vendor_name: name,
+        category: 'Venues',
         price_range: '$$$',
-        rating: 4.9
+        rating: 4.8
       });
+      console.log("👀 Track: Vendor Viewed -> " + name);
     });
 
-    // 3. Simulación de Vendor Shortlisted (Se activa con el botón "Add to Cart")
-    $('.add-to-cart').on('click', function(e) {
+    // 3. VENDOR SHORTLISTED (Add to Cart Fix)
+    // Usamos delegación de eventos para asegurar que siempre funcione
+    $(document).on('click', '.add-to-cart', function(e) {
       e.preventDefault();
-      const vendorName = $(this).data('product-name') || "Photography Service";
+      const vendorName = $(this).data('vendor') || "Special Venue";
       
       analytics.track('Vendor Shortlisted', {
         vendor_name: vendorName,
-        category: 'Services',
-        wishlist_id: 'wish_9988'
+        category: 'Premium Services',
+        wishlist_id: 'wish_9988',
+        interaction_source: 'home_grid'
       });
+      
+      console.log("⭐ Track: Vendor Shortlisted -> " + vendorName);
+      alert("Event 'Vendor Shortlisted' sent to Segment!");
     });
   });
 </script>
   </body>
 
 </html>
+
 
